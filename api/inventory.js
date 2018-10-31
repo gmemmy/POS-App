@@ -47,3 +47,21 @@ app.post("/product", (req, res) => {
       else res.send(product)
    });
 });
+
+app.delete("/product/product:Id", (req, res) => {
+   inventoryDB.remove({ _id: req.params.productId }, (err, numRemoved) => {
+      if (err) res.status(500).send(err);
+      else res.sendStatus(200);
+   });
+});
+
+//Updates inventory product
+app.put("/product", (req, res) => {
+   let productId = req.body._id;
+
+   inventoryDB.update({ _id: productId }, req.body, {}, (err, numReplaced, product) => {
+      if (err) res.status(500).send(err);
+      else res.sendStatus(200);
+   });
+})
+
