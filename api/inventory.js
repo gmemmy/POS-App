@@ -48,6 +48,7 @@ app.post("/product", (req, res) => {
    });
 });
 
+//Removes inventory product by Product Id
 app.delete("/product/product:Id", (req, res) => {
    inventoryDB.remove({ _id: req.params.productId }, (err, numRemoved) => {
       if (err) res.status(500).send(err);
