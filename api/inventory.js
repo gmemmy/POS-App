@@ -65,3 +65,22 @@ app.put("/product", (req, res) => {
    });
 })
 
+app.decrementInventory = (products) => {
+   async.eachSeries(products, (transactionProduct, callback) => {
+      inventoryDB.findOne({ _id: transactionProduct._id }, (err, product) => {
+         //catch manually added items that don't exist in inventory
+         if (!product || !product.quantity_on_hand) {
+            callback();
+         } else {
+            let updatedQuantity = parseInt(product.quantity_on_hand) - parseInt(transactionProduct.quantity);
+
+            inventoryDB.update(
+               { _id: product._id },
+               { $set: { quantity_on_hand: updatedQuantity }},
+               {},
+               callback
+            );
+         }
+      });
+   });
+};
