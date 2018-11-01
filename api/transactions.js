@@ -15,8 +15,23 @@ const Transactions = new Datastore({
     autoload: true
 });
 
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
     res.send('Transactions API')
 })
 
 //GET all transactions
+app.get("/all", (req, res) => {
+    Transactions.find({}, (err, docs) => {
+        res.send(docs)
+    });
+});
+
+app.get("/limit", (req, res) => {
+    let limit = parseInt(req.query.limit, 10)
+    if(!limit) limit = 5;
+
+    Transactions.find({}).limit(limit).sort({ date: -1 })
+    .exec((err, docs) => {
+        res.send(docs);
+    });
+});
